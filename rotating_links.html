@@ -1,0 +1,145 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+  	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+
+      #canvas_container {
+        border: 1px solid black;
+        width: 500px;
+      }
+
+      #foreground_container_1 {
+        border: 4px solid black;
+        position: absolute;
+        left: 145px;
+        top: 125px;
+
+        font-weight: bold;
+        font-size: 15px;
+        width: 50px;
+        text-align: center;
+      }
+
+      #foreground_container_2 {
+        border: 4px solid black;
+        position: absolute;
+        left: 299px;
+        top: 125px;
+
+        font-weight: bold;
+        font-size: 15px;
+        width: 50px;
+        text-align: center;
+      }
+
+      #foreground_container_3 {
+        border: 4px solid black;
+        position: absolute;
+        left: 299px;
+        top: 53px;
+
+        font-weight: bold;
+        font-size: 15px;
+        width: 50px;
+        text-align: center;
+      }
+
+      #foreground_container_4 {
+        border: 4px solid black;
+        position: absolute;
+        left: 145px;
+        top: 53px;
+
+        font-weight: bold;
+        font-size: 15px;
+        width: 50px;
+        text-align: center;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div id="canvas_container" class="box" onmouseover="stopAnim();" onmouseout="startAnim();"></div>
+    <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.5.3.min.js"></script>
+    <script defer="defer">
+      var stage = new Kinetic.Stage({
+        container: 'canvas_container',
+        width: 500,
+        height: 200
+      });
+
+      var layer = new Kinetic.Layer();
+
+      var rect = new Kinetic.Rect({
+        x: 250,			//added 50 (or the offset X value) in order to center the shape between the links
+        y: 100,
+        width: 100,
+        height: 50,
+        fill: 'green',
+        stroke: 'black',
+        strokeWidth: 4,
+        offset: [50, 25]	//sets the center offset (i.e. the axis around which the rotation occurs)
+      });
+
+      // add the shape to the layer
+      layer.add(rect);
+
+      // add the layer to the stage
+      stage.add(layer);
+
+      // one revolution per 4 seconds
+        var angularSpeed = Math.PI / 2;
+        var anim = new Kinetic.Animation(function(frame) {
+          var angleDiff = frame.timeDiff * angularSpeed / 1000;
+          rect.rotate(angleDiff);
+
+          //debug
+          //console.log(rect.getAbsoluteTransform().m);
+          //console.log("y is "rect.getAbsolutePosition());
+
+          //this stuff moves the link boxes along with the rotating rectangle.
+          $('#foreground_container_1').css('left',parseInt(rect.getAbsoluteTransform().m[4])); //no offset
+          $('#foreground_container_1').css('top',parseInt(rect.getAbsoluteTransform().m[5])); //no offset
+
+          $('#foreground_container_2').css('left',parseInt(rect.getAbsoluteTransform().m[4]-50)); //need to adjust offset
+          $('#foreground_container_2').css('top',parseInt(rect.getAbsoluteTransform().m[5]+50)); //need to adjust offset
+
+          $('#foreground_container_3').css('left',parseInt(rect.getAbsoluteTransform().m[4]-100)); //need to adjust offset
+          $('#foreground_container_3').css('top',parseInt(rect.getAbsoluteTransform().m[5])); //need to adjust offset
+
+          $('#foreground_container_4').css('left',parseInt(rect.getAbsoluteTransform().m[4]-50)); //need to adjust offset
+          $('#foreground_container_4').css('top',parseInt(rect.getAbsoluteTransform().m[5]-50)); //need to adjust offset
+
+        }, layer);
+
+        anim.start();
+
+        stopAnim = function(){
+        	anim.stop();
+        }
+
+        startAnim = function(){
+        	anim.start();
+        }
+
+
+    </script>
+    <div id="foreground_container_1" class="box" onmouseover="stopAnim();" onmouseout="startAnim();">
+      <a href="#">hello</a>
+    </div>
+    <div id="foreground_container_2" class="box" onmouseover="stopAnim();" onmouseout="startAnim();">
+      <a href="#">bye</a>
+    </div>
+    <div id="foreground_container_3" class="box" onmouseover="stopAnim();" onmouseout="startAnim();">
+      <a href="#">blue</a>
+    </div>
+    <div id="foreground_container_4" class="box" onmouseover="stopAnim();" onmouseout="startAnim();">
+      <a href="#">green</a>
+    </div>
+  </body>
+</html>
